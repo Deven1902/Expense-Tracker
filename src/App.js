@@ -3,87 +3,62 @@ import React, { useState, useEffect } from 'react';
 import NewExpense from './components/NewExpense/NewExpense';
 import Expenses from './components/Expenses/Expenses';
 
-// const ALL_EXPENSES = [
-//   {
-//     id: 'e1',
-//     title: 'Toilet Paper',
-//     amount: 50,
-//     date: new Date(2020, 7, 14),
-//   },
-
-//   { id: 'e2', 
-//   title: 'New TV', 
-//   amount: 50000, 
-//   date: new Date(2021, 2, 12),
-//   },
-
-//   {
-//     id: 'e3',
-//     title: 'Car Insurance',
-//     amount: 10000,
-//     date: new Date(2021, 2, 28),
-//   },
-
-//   {
-//     id: 'e4',
-//     title: 'New Desk (Wooden)',
-//     amount: 450,
-//     date: new Date(2021, 5, 12),
-//   },
-// ];
 
 const App = () => {
-  const ALL_EXPENSES = localStorage.getItem('expenses')
-  ? JSON.parse(localStorage.getItem('expenses'))
-  : [
-    {
-      id: 'e1',
-      title: 'Toilet Paper',
-      amount: 50,
-      date: new Date(2020, 7, 14),
-    },
-  
-    { id: 'e2', 
-    title: 'New TV', 
-    amount: 50000, 
-    date: new Date(2021, 2, 12),
-    },
-  
-    {
-      id: 'e3',
-      title: 'Car Insurance',
-      amount: 10000,
-      date: new Date(2021, 2, 28),
-    },
-  
-    {
-      id: 'e4',
-      title: 'New Desk (Wooden)',
-      amount: 450,
-      date: new Date(2021, 5, 12),
-    },
-  ];
-
-  const [expenses, setExpenses] = useState(ALL_EXPENSES);
+  const [expenses, setExpenses] = useState([]);
 
   const addExpenseHandler = (expense) => {
     setExpenses((prevExpenses) => {
-      return [expense, ...prevExpenses];
+      const newExp = [expense, ...prevExpenses];
+      localStorage.setItem("expenses", JSON.stringify(newExp));
+      return newExp
     });
   };
 
   useEffect(() => {
-    localStorage.setItem('expenses', JSON.stringify(expenses));
-  }, [expenses]
-  );
-  
+    let exp = localStorage.getItem('expenses')
 
-  // return React.createElement(
-  //   'div',
-  //   {},
-  //   React.createElement('h2', {}, "Let's get started!"),
-  //   React.createElement(Expenses, { items: expenses })
-  // );
+    if (exp) {
+      exp = JSON.parse(exp)
+    }
+    else {
+      exp = [
+        {
+          id: 'e1',
+          title: 'Toilet Paper',
+          amount: 50,
+          date: new Date(2020, 7, 14),
+        },
+
+        {
+          id: 'e2',
+          title: 'New TV',
+          amount: 50000,
+          date: new Date(2021, 2, 12),
+        },
+
+        {
+          id: 'e3',
+          title: 'Car Insurance',
+          amount: 10000,
+          date: new Date(2021, 2, 28),
+        },
+
+        {
+          id: 'e4',
+          title: 'New Desk (Wooden)',
+          amount: 450,
+          date: new Date(2021, 5, 12),
+        },
+      ];
+    }
+
+    for (let i in exp) {
+      exp[i].date = new Date(exp[i].date)
+    }
+    setExpenses(exp)
+  }, []);
+
 
   return (
     <div>
